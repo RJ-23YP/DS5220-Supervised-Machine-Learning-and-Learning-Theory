@@ -1,5 +1,6 @@
 # DS5220-Supervised-Machine-Learning-and-Learning-Theory
 
+This course on supervised machine learning focuses on the study and design of algorithms that enable machines to learn from experience or data with known outcomes. The course covers a broad range of models and algorithms for supervised decision making, including linear regression, classification, support vector machines, neural networks, and deep learning techniques. It discusses the mathematical foundations, practical implementation, and performance assessment of these models. The course also covers recent advances in deep learning and explores new applications through a term project involving programming and working with real-life datasets.
 
 **Linear Regression**
 
