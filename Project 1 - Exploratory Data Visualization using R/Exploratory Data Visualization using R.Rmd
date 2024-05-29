@@ -1,0 +1,194 @@
+---
+title: "DS5220 Project 1 "
+author: "Ruchik Jani (NUID - 002825482)"
+date: "11th February, 2024"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Instructions
+
+R has excellent visualization capabilities, especially with the `ggplot2` package.  Please read Chapter 3 of  [*R for Data Science [GW],* Garrett Grolemund, Hadley Wickham](https://r4ds.had.co.nz), and complete the exercises below after you finish each section.  Edit the markdown file which came with this html directly.  Make sure to enter your R code in the chunks following each question to demonstrate your answers.  Follow each code block with a text description of your solution.  Answers without demonstration will be given little credit.  Code with no description (if requested) will be given little credit.
+
+## 3.2.4 Exercises
+
+1. Run ggplot(data = mpg). What do you see?  
+
+Description:
+
+When we try to run the below code chunk, an empty graph is generated. The function *ggplot* initializes an object with the **mpg** dataset. This happens because we haven't provided any instructions on how to visualize the **mpg** dataset. In order to create a graph that can be easily understood, we will have to use additional functions.  
+
+```{r problem 3.2.4.1}
+library(tidyverse) #Load the tidyverse package
+ggplot(data = mpg) #This line loads an empty object
+```
+
+
+2. How many rows are in mpg? How many columns? Demonstrate how you obtained your answers using R.
+
+Description:
+
+The nrow and ncal functions are used to find the no. of rows and columns in a data frame respectively. 
+
+```{r problem 3.2.4.2}
+nrow(mpg) # Function to display the number of rows in mpg
+ncol(mpg) # Function to display the number of columns in mpg
+
+```
+
+
+
+3. What does the `drv` variable describe? Read the Help Panel in RStudio  by typing `?mpg` in the Console Panel to find out.  (You will see no output from RMarkdown here.)  Produce a description of `drv` by typing `mpg` below.
+
+Description:
+
+After typing '?mpg' in the Console & executing that command, the Help panel gives us a description of the **mpg** dataset along with the variables associated with it. 
+
+The *drv* variable represents the type of drive train in the car. The drive train is a system of mechanical components that links the car engine to the wheels. There are 3 types of drive trains: f = front-wheel drive, r = rear-wheel drive, 4 = four-wheel drive. 
+
+```{r problem 3.2.4.3}
+mpg
+```
+
+
+
+
+4. Make a scatterplot of `hwy` vs `cyl` using `geom_point`.
+
+Description:
+
+The geom_point() function is used in conjunction with the labs() function to visualize the 'hwy' and 'cyl' variables in the **mpg** dataset. From the graph below, we can infer a inverse proportionality between the two variables: As the highway miles per gallon for the car are increasing, the no. of cylinders in the car decreases.
+
+```{r problem 3.2.4.4}
+ggplot(data = mpg) + # Initialize a ggplot object using the 'mpg' dataset
+geom_point(aes(x = cyl, y = hwy)) + # Add a layer of points to the plot with 'hwy' on x-axis and 'cyl' on y-axis
+labs(title = "Highway miles per gallon vs Number of cylinders") # Add a title to the plot 
+
+```
+
+5. What happens if you make a scatterplot of `class` vs `drv`? Why is the plot not useful?
+
+Description:
+
+The scatterplot is not useful in this case since scatterplots are used to visualize the correlation between two continuous variables. The 'class' and 'drv' are categorical variables which represent discontinuous data. A scatterplot between these results in a series of discrete points scattered across the plot area. It cannot be used to identify any meaningful patterns or trends. 
+
+```{r problem 3.2.4.5}
+ggplot(data = mpg) +
+geom_point(aes(x = drv, y = class)) +
+labs(title = "Vehicle type vs Drive train type", x = "Drive train type", y = "Vehicle type") #Custom labels provided to x-axis and y-axis. 
+
+
+```
+
+
+## 3.3.1 Exercises
+
+1. Fix the code in problem 3.3.1.1, and enter it below
+
+Description:
+
+In the question, the color aesthetic was passed inside the 'aes()' function due to which the output plot color was not blue. This is because when we put a constant value like blue inside this function, the 'ggplot()' will interpret this as a discrete category and then treats it as a mapping. This assigns different colors to different levels of the string *blue*. By specifying the blue value to color aesthetic outside the 'aes()' function, we can ensure that 'ggplot()' will use the color blue for all points.    
+
+```{r problem 3.3.1.1}
+ggplot(data = mpg) + 
+geom_point(mapping = aes(x = displ, y = hwy), color = "blue") #Set the color of all the points to blue.
+
+```
+
+2. Which variables in `mpg` are categorical? Which variables are continuous? (Hint: type `?mpg` in the Console Panel to read the documentation for the dataset in the Help Panel). How can you see this information when you run `mpg`?
+
+Description:
+
+The classification of variables is given below:
+
+Categorical: 'manufacture', 'model', 'trans', 'drv', 'fl', 'class'
+
+Continuous: 'displ', 'year', 'cyl', 'cty', 'hwy'
+  
+When we run 'mpg', the **mpg** dataset is displayed in a tabular format with the name and type of the variables in the heading. From the datatype, we can easily classify the variables as continuous or categorical. 
+
+```{r problem 3.3.1.2}
+mpg
+
+```
+
+
+3. Using your R code for 3.3.1.1, map a continuous variable to `color`, `size`, and `shape`. How does the aesthetic `shape` behave differently for mappings to `fl` and `displ`?
+
+Description:
+
+When we map the continuous variable 'displ' to the 'color' and 'size' aesthetics, we are able to generate a meaningful visual scatterplot. 
+
+When we try to map 'displ' to the 'shape' aesthetic, the code will generate a warning since shape aesthetic can be used only for categorical variables. 
+
+
+```{r problem 3.3.1.3a}
+ggplot(data = mpg) + 
+geom_point(mapping = aes(x = displ, y = hwy, color = displ, size = displ)) #Mapping a continuous variable 'displ' to color and size aesthetics
+
+```
+
+Mapping `displ` to `color` and `size` produce meaningful results. Mapping `displ` to `shape` produces a warning. Assigning the aesthetic `shape` to `fl` produces the following.
+
+```{r problem 3.3.1.3b}
+ggplot(data = mpg) + 
+geom_point(mapping = aes(x = displ, y = hwy, shape = fl)) #Mapping 'fl' to shape aesthetic
+
+```
+
+
+4. What happens if you map the same variable to multiple aesthetics? Use an example from your answers to problem 3.3.1.3.
+
+Description:
+
+While mapping continuous variables to multiple aesthetics, an error will be generated for shape. 
+
+While mapping categorical variables to multiple aesthetics, a warning will be generated for size. 
+
+In both the cases, mapping the same variable to different aesthetics results in the same variable determining different visual properties of the plot elements. This can lead to confusion and visual clutter. Mapping the same variable to multiple aesthetics should be done when the resultant plot can be easily interpreted and there is visual distinction. 
+
+
+```{r problem 3.3.1.5 a}
+#Categorical variable mapping 
+ggplot(data = mpg) + 
+geom_point(mapping = aes(x = displ, y = hwy, color = fl, shape = fl))
+```
+
+```{r problem 3.3.1.5 b}
+#Continuous variable mapping 
+ggplot(data = mpg) + 
+geom_point(mapping = aes(x = displ, y = hwy, color = displ, size = displ))
+
+```
+
+5. What does the `stroke` aesthetic do? What shapes does it work with? (Hint: use`?geom_point`) Try it with `shape=21` and `stroke=displ` in your  code from 3.3.1.1.
+
+Description:
+
+The 'stroke' aesthetic controls the width and color of the border of a shape in the plot. It works with shapes that have outlines like shapes 21-25. When we select 'shape=21', this specifies a point shape that consists of a circle with an outline. 
+
+```{r problem 3.3.1.5}
+
+ggplot(data = mpg) +
+geom_point(aes(x = displ, y = hwy, stroke=displ), shape=21, color="blue")
+
+
+```
+
+
+6. What happens if you map an aesthetic to something other than a variable name, like `aes(colour = displ < 5)`?  Try this by modifying your code in problem 3.3.1.1.
+
+Description:
+
+When we mao the color aesthetic to the above given expression, the 'ggplot()' function will map the 'True' and 'False' values to different colors. The expression results in 'True' when 'displ' is less than 5 and 'False' otherwise. This can be used to create visualizations that highlight specific patterns or attributes in data depending on logical conditions. 
+
+```{r problem 3.3.1.6}
+
+ggplot(data = mpg) +
+geom_point(aes(x = displ, y = hwy, colour = displ < 5))
+
+```
+

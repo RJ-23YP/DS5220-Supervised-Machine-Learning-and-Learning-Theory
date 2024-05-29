@@ -1,0 +1,472 @@
+---
+title: 'Chapter 2 Lab: Introduction to R'
+author: "Ruchik Jani (NUID - 002825482)"
+date: "17th March, 2024"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+**Instructions and time-saving hints.**  To begin this lab, download the archive and unpack it.  Inside the folder, you will find a Rmarkdown file and csv files for lab data.  Please keep the Rmarkdown file in the same directory as the data files.
+
+The purpose of the first part of this lab is to quickly review the basics of R.  To review the basics, you will reproduce the commands blocks in JW Section 2.3 in this Rmarkdown file.  **Please do not retype all the R commands as shown in Section 2.3.**  Instead, go to [link to text for Lab 2](http://faculty.marshall.usc.edu/gareth-james/ISL/Chapter%202%20Lab.txt), cut and paste the text into your Rmarkdown file.  Then break up the R commands into the R chunks shown in the text.  (R chunks are braced by triple backticks and a leading {r}, as before.)  Do not put all commands into the same block!  The idea is to imitate the code chunks in Section 2.3 with the additional plots and output omitted from the text.  Below, I have given you the first two blocks for reference.
+
+After breaking the text into the correct chunks, you may knit the document.
+You will notice two problems when knitting.  The first is the appearance of a data editor window (3 times), due to the `fix()` commands in the blocks.  You may simply quit these windows each time, or comment out the `fix()` statements.  The second problem is an error message, due to the block at the top of p. 50 in JW.  You may comment out this `plot()` statement to knit again.
+
+Congratulations!  When the document is successfully knitted, you should read Section 2.3 along with the Rmarkdown output.  You should see the commands along with the output plots.  Of course, the blocks with help commands, fix() commands, and intentional errors will not be reproduced.  Together, JW2.3 and your Rmarkdown file will help you to review some basics of R.  Note that the plotting is done with core R commands and not with the `ggplot2` package as in Homework 0.
+
+Next, you will apply these core R basics to the `College.csv` dataset, as described in problem 8, JW p.54.  Please complete the Rmarkdown document corresponding to problem statement.  Submit your Rmd file along with an unzipped PDF of the result before the deadline.
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load necessary libraries
+library(grDevices)
+```
+
+# Basic Commands
+
+
+```{r}
+x <- c(1,3,2,5)
+x
+```
+
+```{r}
+x = c(1,6,2)
+x
+y = c(1,4,3)
+```
+
+```{r}
+length(x)
+length(y)
+x+y
+```
+
+```{r}
+ls()
+rm(x,y)
+ls()
+```
+
+```{r}
+rm(list=ls())
+```
+
+```{r}
+?matrix
+```
+
+```{r}
+x=matrix(data=c(1,2,3,4), nrow=2, ncol=2)
+x
+```
+
+```{r}
+x=matrix(c(1,2,3,4),2,2)
+```
+
+```{r}
+matrix(c(1,2,3,4),2,2,byrow=TRUE)
+```
+
+```{r}
+sqrt(x)
+x^2
+```
+
+```{r}
+x=rnorm(50)
+y=x+rnorm(50,mean=50,sd=.1)
+cor(x,y)
+```
+
+```{r}
+set.seed(1303)
+rnorm(50)
+```
+
+```{r}
+set.seed(3)
+y=rnorm(100)
+mean(y)
+var(y)
+sqrt(var(y))
+sd(y)
+```
+
+
+# Graphics
+
+
+```{r}
+x=rnorm(100)
+y=rnorm(100)
+plot(x,y)
+plot(x,y,xlab="this is the x-axis",ylab="this is the y-axis",main="Plot of X vs Y")
+```
+
+```{r}
+pdf("Figure.pdf")
+plot(x,y,col="green")
+dev.off()
+```
+
+```{r}
+x=seq(1,10)
+x
+x=1:10
+x
+x=seq(-pi,pi,length=50)
+```
+
+```{r}
+y=x
+f=outer(x,y,function(x,y)cos(y)/(1+x^2))
+contour(x,y,f)
+contour(x,y,f,nlevels=45,add=T)
+fa=(f-t(f))/2
+contour(x,y,fa,nlevels=15)
+```
+
+```{r}
+image(x,y,fa)
+persp(x,y,fa)
+persp(x,y,fa,theta=30)
+persp(x,y,fa,theta=30,phi=20)
+persp(x,y,fa,theta=30,phi=70)
+persp(x,y,fa,theta=30,phi=40)
+```
+
+
+# Indexing Data
+
+
+```{r}
+A=matrix(1:16,4,4)
+A
+```
+
+```{r}
+A[2,3]
+```
+
+```{r}
+A[c(1,3),c(2,4)]
+A[1:3,2:4]
+A[1:2,]
+A[,1:2]
+```
+
+```{r}
+A[1,]
+```
+
+```{r}
+A[-c(1,3),]
+A[-c(1,3),-c(1,3,4)]
+```
+
+```{r}
+dim(A)
+```
+
+
+# Loading Data
+
+
+```{r}
+Auto=read.table("Auto.data")
+fix(Auto)
+```
+
+```{r}
+Auto=read.table("Auto.data",header=T,na.strings="?")
+fix(Auto)
+```
+
+```{r}
+Auto=read.csv("Auto.csv",header=T,na.strings="?")
+fix(Auto)
+dim(Auto)
+Auto[1:4,]
+```
+
+```{r}
+Auto=na.omit(Auto)
+dim(Auto)
+```
+
+```{r}
+names(Auto)
+```
+
+
+# Additional Graphical and Numerical Summaries
+
+
+```{r}
+#plot(cylinders, mpg)
+```
+
+```{r}
+plot(Auto$cylinders, Auto$mpg)
+attach(Auto)
+plot(cylinders, mpg)
+```
+
+```{r}
+cylinders=as.factor(cylinders)
+```
+
+```{r}
+plot(cylinders, mpg)
+plot(cylinders, mpg, col="red")
+plot(cylinders, mpg, col="red", varwidth=T)
+plot(cylinders, mpg, col="red", varwidth=T,horizontal=T)
+plot(cylinders, mpg, col="red", varwidth=T, xlab="cylinders", ylab="MPG")
+```
+
+```{r}
+hist(mpg)
+hist(mpg,col=2)
+hist(mpg,col=2,breaks=15)
+```
+
+```{r}
+#pairs(Auto)
+pairs(~ mpg + displacement + horsepower + weight + acceleration, Auto)
+```
+
+```{r}
+# Open an interactive graphical device using X11
+X11()
+plot(horsepower,mpg)
+identify(horsepower,mpg,name)
+# Close the interactive graphical device by just giving a right click on the interactive 
+# window in case you are using Linux OS. 
+dev.off()
+```
+
+```{r}
+summary(Auto)
+```
+
+```{r}
+summary(mpg)
+```
+
+
+# Applied JW p.54 (8.)
+
+
+Here, we are using the `College` data set, found in  `College.csv`. 
+Before reading the data into R, it can be viewed in Excel or a text editor.
+
+1. Use the `read.csv()` function to read the data into R. Call the loaded data `college`. Make sure that you have the directory set to the correct location for the data.
+
+```{r}
+#Read the data from College csv file
+college <- read.csv("College.csv")
+```
+
+2. Look at the data using the `fix()` function. You should notice that the first column is just the name of each university. We don’t really want R to treat this as data. However, it may be handy to have these names for later. Try the following commands:
+
+```{r}
+rownames(college)=college[,1] 
+fix(college)
+```
+
+You should see that there is now a `row.names` column with the name of each university recorded. This means that R has given each row a name corresponding to the appropriate university. R will not try to perform calculations on the row names. However, we still need to eliminate the first column in the data where the names are stored. Try
+
+```{r}
+college=college[,-1] 
+fix(college)
+```
+
+Now you should see that the first data column is `Private`. Note that another column labeled `row.names` now appears before the `Private` column. However, this is not a data column but rather the name that R is giving to each row.
+
+3.   Please complete these parts.
+
+    Use the `summary()` function to produce a numerical summary of the variables in the data set.  
+    
+```{r}
+# Convert the 'Private' column in the 'college' dataset to a factor variable to represent 
+# the categorical data indicating whether each institution is private or public.
+college$Private <- as.factor(college$Private)
+summary(college)
+```
+
+Use the `pairs()` function to produce a scatterplot matrix of the first ten columns or variables of the data. Recall that you can reference the first ten columns of a matrix `A` using `A[,1:10]`.  
+    
+```{r}
+pairs(college[, 1:10])
+```
+
+Use the `plot()` function to produce side-by-side boxplots of `Outstate` versus `Private`.
+    
+```{r}
+plot(Outstate ~ Private, data = college, col = c("blue", "red"))
+```
+
+Create a new qualitative variable, called `Elite`, by *binning* the `Top10perc` variable. We are going to divide universities into two groups based on whether or not the proportion of students coming from the top 10% of their high school classes exceeds 50 %.
+    
+```{r}
+# Assign "No" to all rows in the new column college.Elite
+college.Elite <- rep("No", nrow(college))
+# Update college.Elite to "Yes" where the Top10perc is greater than 50
+college.Elite[college$Top10perc > 50] <- "Yes"
+# Combine the college dataset with the newly created college.Elite column
+college <- data.frame(college, college.Elite)
+# Change the column name from college.Elite to Elite
+colnames(college)[which(names(college) == "college.Elite")] <- "Elite"
+# Convert the Elite column to a factor variable
+college$Elite <- as.factor(college$Elite)
+```
+
+Use the `summary()` function to see how many elite universities there are. Now use the `plot()` function to produce side-by-side boxplots of `Outstate` versus `Elite`.
+    
+```{r}
+summary(college$Elite)
+plot(Outstate ~ Elite, data = college, col= c("blue", "red"))
+fix(college)
+```
+Use the `hist()` function to produce some histograms with 5 and 50 bins for `Outstate` and `Apps`. Use the command `par(mfrow=c(2,2))`: it will divide the print window into four regions so that four plots can be made simultaneously. 
+    
+```{r}
+# Set the layout to a 2x2 grid
+par(mfrow = c(2, 2))
+hist(college$Outstate, breaks = 5, main = "Outstate (5 bins)", 
+     xlab = "Out-of-state tuition", col="red")
+hist(college$Outstate, breaks = 50, main = "Outstate (50 bins)", 
+     xlab = "Out-of-state tuition", col = "lightcoral")
+hist(college$Apps, breaks = 5, main = "Apps (5 bins)", 
+     xlab = "Number of applications received", col="blue")
+hist(college$Apps, breaks = 50, main = "Apps (50 bins)", 
+     xlab = "Number of applications received", col = "lightblue")
+```
+
+*Continue exploring the data, and provide a brief summary of what you discover.* 
+
+This statement is intentionally vague: as a data scientist, it will be your job to propose hypotheses about the data, and then to use the data to address your hypotheses. This is a creative, iterative, (and fun) process. 
+
+In this first lab I will propose four hypotheses for you.  You must address these hypotheses with the suggested approaches. The approach will be to produce one plot for each hypothesis in a 2 by 2 set of plots.  Discuss your findings for each case, including: whether the data supports or rejects the hypothesis, and to what degree the hypothesis is rejected or supported.  After addressing the four hypotheses, I would like for you to propose at least one more hypothesis, and  develop a methodology.  Brevity matters, and less is best.  Produce a single plot upon which to base your answer.  Long answers will be given little credit.  For this last part, you will be graded on the "interest" of the hypothesis, your approach to address it, and your discussion.  
+
+*Hypothesis 1. The tuition at the best colleges, as indicated by `Elite`, is higher than that at other colleges.*  **Methodology:** Use one-over-other horizontal red boxplots of `Outstate` for elite and non-elite colleges.  Title and label the axes of this plot thoughtfully. Carefully use this single plot to address this hypothesis. Can you be precise about the word *higher* ?
+
+
+The enrollment rate is the fraction of accepted students who enrolled.
+*Hypothesis 2. The enrollment rate at the best colleges, as indicated by `Elite`, is higher than that at other colleges.*  **Methodology:** Create a new variable called `EnrollRate`, using `Enroll` and `Accept`.  Use the `attach()` function to make your code cleaner. Use one-over-other horizontal green boxplots of `EnrollRate` for elite and non-elite colleges.  Title and label the axes of this plot thoughtfully. Carefully use this single plot to address this hypothesis.  Can you be precise about the word *higher* ? Can you comment on the presence of outliers in the boxplots?
+
+*Hypothesis 3. The number of applications per enrolled student is higher at elite colleges than other colleges.* **Methodology:** Use one-over-other horizontal blue boxplots of applications per enrolled student for elite and non-elite colleges. Title and label the axes of this plot thoughtfully. Carefully use this single plot to address this hypothesis. Can you be precise about the word *higher* ?  Can you comment on the presence of outliers in the boxplots?
+
+*Hypothesis 4.  The fraction of alumni who donate is higher at elite colleges than other colleges.* **Methodology:** Use one-over-other horizontal cyan boxplots of `perc.alumni` for elite and non-elite colleges. Title and label the axes of this plot thoughtfully. Carefully use this single plot to address this hypothesis.  Can you be precise about the word *higher* ?
+    
+```{r}
+## Set the layout to a 2x2 grid of boxplots
+par(mfrow=c(2, 2))
+
+#Hypothesis-1 
+plot(Outstate ~ Elite, data = college, horizontal = TRUE, 
+      main = "Tuition Fees Comparison", 
+      ylab = "Out-of-State Tuition ($)", xlab = "Elite Status", col= c("lightcoral", "red"))
+
+#Hypothesis-2
+college$EnrollRate <- (college$Enroll / college$Accept) * 100
+attach(college)
+plot(EnrollRate ~ Elite, data = college, horizontal = TRUE, 
+      main = "Enrollment Rate Comparison",
+      ylab = "Enrollment Rate (%)", xlab = "Elite Status", col= c("lightgreen", "green"))
+
+#Hypothesis-3
+# Create a new variable 'AppsPerEnrolled' representing applications per enrolled student.
+college$AppsPerEnrolled <- college$Apps / college$Enroll
+
+plot(AppsPerEnrolled ~ Elite, data = college, horizontal = TRUE, 
+      main = "Application Quantity Comparison",
+      ylab = "No. of Applications", xlab = "Elite Status", col= c("lightblue", "blue"))
+
+#Hypothesis-4
+plot(perc.alumni ~ Elite, data = college, horizontal = TRUE, 
+      main = "Alumni Donation Comparison",
+      ylab = "Alumni who donate (%)", xlab = "Elite Status", col= c("lightcyan", "cyan"))
+
+#Add plot title
+mtext("Boxplots for Hypothesis-1 to 4", line=-1.4, side=3, outer=TRUE, cex=1.5)
+```
+
+
+# Conclusions drawn from the Hypotheses
+
+
+### **Hypothesis-1: The tuition at the best colleges, as indicated by `Elite`, is higher than that at other colleges.**
+
+- The median value of the out-of-state tuition in elite institutions is approximately $17,000, whereas the median value for non-elite institutions is around $9500.
+- The box for elite institutions is from $12,500 to $18,500. This indicates that a spread (or variability) in data of $6000 for the elite institutions. The box for the non-elite institutions is from $7500 to $12,500. This implies a spread of $5000. 
+- It is clear from the boxplots that there is no overlap in the two-categories. The end point of non-elite institutions is the starting point for the elite-institutions. 
+- **From these observations, it is clear that the data supports the hypothesis.**
+- **The data strongly supports the hypothesis.** The the median for elite institutions ($17,000) is significantly *higher* than the median for non-elite institutions ($9,500). This indicates a clear difference in central tendency, with elite colleges having a higher median tuition. Also, there is a complete lack of overlap between the boxes. This strong separation reinforces the significant difference in tuition between the two groups.
+
+
+### **Hypothesis-2: The enrollment rate at the best colleges, as indicated by `Elite`, is higher than that at other colleges.**
+
+- The median value of the enrollment rate in elite institutions is approximately 35%, whereas the median value for non-elite institutions is around 38%.
+- The box for elite institutions is approximately from 30% to 43%. This indicates that a spread (or variability) in data of 13% for the elite institutions. The box for the non-elite institutions is from 35% to 50%. This implies a spread of 15%. 
+- It is clear from the boxplots that there is a significant overlap in the two categories from 35% (starting of non-elite) to 43% (end of elite). 
+- The overall range of the elite institutions (20-75%) also appears to be far smaller as compared to non-elite institutions (5-75%).
+- There is one outlier at 77% in the elite institutions and a lot of outliers ranging from 75-100% for the non-elite institutions. 
+- **From these observations, it is clear that the data rejects the hypothesis.**
+- **The data weekly rejects the hypothesis.** Median enrollment is higher for non-elite colleges. Overlapping boxes and a potentially smaller range in elite colleges suggest enrollment rates there may not be consistently *higher*. While outliers exist in both groups, their presence makes it difficult to definitively say which category has a *higher* enrollment rate.
+
+
+### **Hypothesis-3: The number of applications per enrolled student is higher at elite colleges than other colleges.**
+
+- The median value of the number of applications per enrolled student in elite institutions is approximately 5.7, whereas the median value for non-elite institutions is around 3.5.
+- The box for elite institutions is approximately from 4.5 to 7. This indicates that a spread (or variability) in data of 2.5 for the elite institutions. The box for the non-elite institutions is from 2.5 to 4.2. This implies a spread of 1.7. 
+- It is clear from the boxplots that there is no overlap between the two categories.
+- The overall range of the elite institutions (2.4 - 10.5) also appears to be larger than the range for non-elite institutions (0.8 - 6.8).
+- There is one outlier at 11.5 in the elite institutions and a lot of outliers ranging from 6.8 to 14.5 for the non-elite institutions. 
+- **From these observations, it is clear that the data rejects the hypothesis.**
+- **The data strongly rejects the hypothesis.** Elite colleges have a significantly higher median number of applications per enrolled student (around 5.7) compared to non-elite colleges (around 3.5). While there are outliers in both groups, the fact that the elite college boxes do not overlap with the non-elite college boxes suggests that the overall application rates at elite colleges tend to be higher. The presence of outliers, however, highlights that there may be some non-elite colleges with very high application rates and some elite colleges with lower application rates. But, they do not necessarily invalidate the overall trend observed in the boxplots.
+
+
+### **Hypothesis-4: The fraction of alumni who donate is higher at elite colleges than other colleges.**
+
+- The median value of alumni who donate in elite institutions is approximately 35%, whereas the median value for non-elite institutions is around 20%.
+- The box for elite institutions is approximately from 23% to 45%. This indicates that a spread (or variability) in data of 22% for the elite institutions. The box for the non-elite institutions is from 12% to 30%. This implies a spread of 18%. 
+- It is clear from the boxplots that there is a overlap in the two categories from 23% (starting of elite) to 30% (end of non-elite). 
+- The overall range of the elite institutions (7-63%) also appears to be similar to the range for non-elite institutions (0 - 58%).
+- There are zero outliers in the elite institutions and two outliers at 59% & 60% for the non-elite institutions. 
+- **From these observations, it is clear that the data supports the hypothesis.**
+- **The data weakly supports the hypothesis.** While there's some overlap, the higher median and potentially lower minimum donation rate for elite colleges suggest a tendency for a higher fraction of alumni donating at those institutions. The overlap and similar overall ranges prevent definitive statements about a universally *higher* donation rate at elite colleges. There might be some non-elite colleges with very engaged alumni bases. 
+
+
+
+## **My Hypothesis: The expenditure per student on instruction at elite colleges is higher than other colleges.**
+
+### Methodology: 
+
+- Calculate the expenditure per student on instruction for each college using the *Expend* variable. 
+- Use a boxplot to compare the expenditure per student on instruction between elite and non-elite colleges.
+- Interpret the plot to determine whether elite colleges tend to allocate more resources per student to instruction compared to non-elite colleges. Draw conclusions about whether the data supports the hypothesis or not, and how strongly does it do so from the boxplot.  
+
+```{r}
+#My Hypothesis 
+plot(Expend ~ Elite, data = college, horizontal = TRUE, main = "Instructional expenditure 
+     per student in Elite vs Non-Elite Colleges", ylab = "Instructional Expenditure ($)", 
+     xlab = "Elite Status", col= c("lightblue", "red"))
+```
+
+
+### Conclusion: 
+
+- The median value of the instructional expenditure per student in elite institutions is approximately $16,000, whereas the median value for non-elite institutions is around $7,500.
+- The box for elite institutions is approximately from $13,000 to $22,000. This indicates that a spread (or variability) in data of $9000 for the elite institutions. The box for the non-elite institutions is from $6000 to $10,000. This implies a spread of $4000. 
+- It is clear from the boxplots that there is no overlap between the two categories.  
+- The overall range of the elite institutions ($5000 to $35,000) also appears to be much larger than the range for non-elite institutions ($3000 to $15,000).
+- There are many outliers for non-elite institutions in the $15,000 to $20,000 range. There are 2 outliers at $23,000 and one outlier at $44,000 for the non-elite institutions. 
+- There are 5 outliers for elite institutions in the $37,000 to $46,000 range. There is one outlier at $57,000 for the elite institutions. 
+- **From these observations, it is clear that the data supports the hypothesis.**
+- **The data strongly supports the hypothesis.** The median instructional expenditure for elite institutions is significantly higher than for non-elite institutions. This is a clear difference in central tendency. There's no overlap in the boxes, indicating a consistent difference. The spread and overall range is much larger for elite institutions, suggesting greater variation in their spending. While there are outliers in both groups, the number and range of outliers for non-elite colleges might be due to specific circumstances (e.g., specialized programs). The outliers for elite colleges are potentially very high spending institutions within the elite category. 
+ 
