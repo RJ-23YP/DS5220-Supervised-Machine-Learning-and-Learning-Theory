@@ -34,6 +34,7 @@ Concepts covered: Image classification, support vector machines (SVM), convoluti
 Programming Languages: R, Python
 
 Libraries and Frameworks: 
-R - ggplot2, tidyverse, boot, ISLR
-Python - PyTorch, NumPy
+
+- R - ggplot2, tidyverse, boot, ISLR
+- Python - PyTorch, NumPy
 
